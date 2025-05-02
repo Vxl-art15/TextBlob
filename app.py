@@ -6,25 +6,25 @@ from googletrans import Translator
 
 # Configuración de la página
 st.set_page_config(
-    page_title="Procesador de Texto Básico",
-    page_icon="📊",
+    page_title="Editor de Texto Simple",
+    page_icon="",
     layout="wide"
 )
 
 # Título y descripción
-st.title("Evaluador Lingüístico con TextBlob")
+st.title("Analizador de Lenguaje con TextBlob")
 st.markdown("""
-Esta herramienta emplea TextBlob para procesar y evaluar texto de forma elemental
-- Análisis de Texto con TextBlob
-- Analizador de Texto con TextBlob
-- Conteo léxico
+🎯 Opciones para tu herramienta basada en TextBlob:
+- 🔍 Análisis de Texto con TextBlob
+- 📊 Analizador de Texto con TextBlob
+- 📝 Conteo Léxico
 """)
 
 # Barra lateral
 st.sidebar.title("Opciones")
 modo = st.sidebar.selectbox(
-    "Elige el método de ingreso:",
-    ["Entrada manual", "Documento de texto"]
+    "Método de ingreso:",
+    ["Ingreso por teclado", "Archivo de texto plano"]
 )
 
 # Función para contar palabras sin depender de NLTK
@@ -154,11 +154,11 @@ def crear_visualizaciones(resultados):
         st.progress(sentimiento_norm)
         
         if resultados["sentimiento"] > 0.05:
-            st.success(f"🌈 Optimista ({resultados['sentimiento']:.2f})")
+            st.success(f"🚀 Entusiasta ({resultados['sentimiento']:.2f})")
         elif resultados["sentimiento"] < -0.05:
-            st.error(f"🌧️ Pesimista ({resultados['sentimiento']:.2f})")
+            st.error(f"😞 Desanimado ({resultados['sentimiento']:.2f})")
         else:
-            st.info(f"☁️ Imparcial ({resultados['sentimiento']:.2f})")
+            st.info(f"☁️ Indiferente ({resultados['sentimiento']:.2f})")
         
         # Subjetividad ya está en el rango 0-1
         st.write("**Subjetividad:**")
@@ -171,13 +171,13 @@ def crear_visualizaciones(resultados):
     
     # Palabras más frecuentes usando chart de Streamlit
     with col2:
-        st.subheader("Términos recurrentes")
+        st.subheader("Palabras clave frecuentes")
         if resultados["contador_palabras"]:
             palabras_top = dict(list(resultados["contador_palabras"].items())[:10])
             st.bar_chart(palabras_top)
     
     # Mostrar texto traducido
-    st.subheader("Texto Traducido")
+    st.subheader("Resultado de la traducción")
     with st.expander("Ver traducción completa"):
         col1, col2 = st.columns(2)
         with col1:
@@ -188,7 +188,7 @@ def crear_visualizaciones(resultados):
             st.text(resultados["texto_traducido"])
     
     # Análisis de frases
-    st.subheader("Frases detectadas")
+    st.subheader("Segmentos identificados")
     if resultados["frases"]:
         for i, frase_dict in enumerate(resultados["frases"][:10], 1):
             frase_original = frase_dict["original"]
@@ -217,16 +217,16 @@ def crear_visualizaciones(resultados):
 
 # Lógica principal según el modo seleccionado
 if modo == "Texto directo":
-    st.subheader("Ingresa tu texto para analizar")
+    st.subheader("Introduce el contenido a evaluar")
     texto = st.text_area("", height=200, placeholder="Escribe o pega aquí el texto que deseas analizar...")
     
-    if st.button("Analizar texto"):
+    if st.button("Procesar texto"):
         if texto.strip():
             with st.spinner("Analizando texto..."):
                 resultados = procesar_texto(texto)
                 crear_visualizaciones(resultados)
         else:
-            st.warning("Por favor, ingresa algún texto para analizar.")
+            st.warning("Por favor, escribe o pega tu texto aquí para analizarlo.")
 
 elif modo == "Archivo de texto":
     st.subheader("Carga un archivo de texto")
@@ -246,7 +246,7 @@ elif modo == "Archivo de texto":
             st.error(f"Error al procesar el archivo: {e}")
 
 # Información adicional
-with st.expander("📚 Información sobre el análisis"):
+with st.expander("Detalles del análisis"):
     st.markdown("""
     ### Sobre el análisis de texto
     
